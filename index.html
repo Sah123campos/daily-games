@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Games Hub · Jogos Diários dos Streamers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #eef4fb;
+            --bg-alt: #e2ecf8;
+            --card: #ffffff;
+            --border: #d4e3f2;
+            --border-hover: #a8c8e8;
+
+            --text: #1a3a5c;
+            --text-muted: #5f7d9e;
+            --text-dim: #8fa8c4;
+
+            --blue: #7cb9e8;
+            --blue-dark: #4a90c2;
+            --blue-deep: #2c6b9e;
+            --blue-light: #e3f0fb;
+            --blue-border: #b8d9f0;
+
+            --green: #7dd3a8;
+            --green-dark: #4aab7a;
+            --green-deep: #2e8a5c;
+            --green-light: #e4f7ee;
+            --green-border: #b0e5c9;
+
+            --radius: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 185, 232, 0.25), transparent 70%),
+                radial-gradient(ellipse 60% 40% at 90% 110%, rgba(125, 211, 168, 0.15), transparent 70%);
+            background-attachment: fixed;
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        .page {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 4rem 2rem 5rem;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.5rem 1.15rem;
+            background: #ffffff;
+            border: 1.5px solid var(--blue-border);
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--blue-deep);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 14px rgba(124, 185, 232, 0.2);
+        }
+
+        .logo-badge .dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--green-light);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.8); }
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.08;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        h1 .accent-blue { color: var(--blue-dark); }
+        h1 .accent-green { color: var(--green-dark); }
+
+        .subhead {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .subhead strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        /* ===== FILTROS ===== */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.55rem 1rem;
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--blue-border);
+            color: var(--blue-deep);
+            background: var(--blue-light);
+        }
+
+        .filter-btn.active {
+            background: var(--blue-deep);
+            border-color: var(--blue-deep);
+            color: #ffffff;
+        }
+
+        /* ===== GRID ÚNICO ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.4rem 1.3rem 1.2rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(124, 185, 232, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--blue);
+            transition: height 0.25s ease;
+        }
+
+        .card.green::before {
+            background: var(--green);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: 0 16px 28px -14px rgba(74, 144, 194, 0.3);
+        }
+
+        .card:hover::before {
+            height: 5px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            line-height: 1;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.12) rotate(-4deg);
+        }
+
+        .card-cat {
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.28rem 0.6rem;
+            border-radius: 6px;
+            background: var(--blue-light);
+            color: var(--blue-deep);
+            border: 1px solid var(--blue-border);
+        }
+
+        .card.green .card-cat {
+            background: var(--green-light);
+            color: var(--green-deep);
+            border-color: var(--green-border);
+        }
+
+        .card-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1.5px solid var(--border);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            line-height: 1.7;
+        }
+
+        footer a {
+            color: var(--blue-dark);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        footer a:hover {
+            color: var(--green-dark);
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 640px) {
+            .page {
+                padding: 2.5rem 1.1rem 4rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 0.85rem;
+            }
+
+            h1 {
+                font-size: 1.9rem;
+            }
+
+            .subhead {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+
+        <!-- HEADER -->
+        <header>
+            <div class="logo-badge">
+                <span class="dot"></span>
+                Hub dos Streamers
+            </div>
+            <h1>
+                Jogos diários. <span class="accent-blue">Um só</span> <span class="accent-green">lugar</span>.
+            </h1>
+            <p class="subhead">
+                Os desafios que os streamers amam — palavras, jogos, livros, músicas, artigos e cores. Clique em qualquer card para jogar.
+            </p>
+        </header>
+
+        <!-- FILTROS -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="palavras">Palavras</button>
+            <button class="filter-btn" data-filter="jogos">Jogos</button>
+            <button class="filter-btn" data-filter="matematica">Matemática</button>
+            <button class="filter-btn" data-filter="livros">Livros</button>
+            <button class="filter-btn" data-filter="artigos">Artigos</button>
+            <button class="filter-btn" data-filter="cores">Cores</button>
+            <button class="filter-btn" data-filter="outros">Outros</button>
+        </div>
+
+        <!-- GRID ÚNICO -->
+        <div class="grid" id="grid">
+
+            <!-- PALAVRAS PT-BR -->
+            <a href="https://term.ooo/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🇧🇷</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Termo</div>
+                <div class="card-desc">Adivinhe a palavra de 5 letras em 6 tentativas. Verde = certa no lugar; amarelo = certa no lugar errado.</div>
+            </a>
+
+            <a href="https://term.ooo/2/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">2️⃣</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Termo de 2</div>
+                <div class="card-desc">Versão com palavras de 6 letras. Mesma lógica de cores do Termo original.</div>
+            </a>
+
+            <a href="https://term.ooo/4/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">4️⃣</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Termo de 4</div>
+                <div class="card-desc">Modo difícil com palavras de 7 letras. Para quem já domina o Termo normal.</div>
+            </a>
+
+            <a href="https://gabtoschi.com/letreco/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🔤</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Letreco</div>
+                <div class="card-desc">Alternativa brasileira ao Wordle. Use as dicas de cores para acertar a palavra do dia.</div>
+            </a>
+
+            <a href="https://palavra-do-dia.pt/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">📅</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Palavra do Dia</div>
+                <div class="card-desc">Versão portuguesa do Termo. Adivinhe a palavra de 5 letras com feedback de cores.</div>
+            </a>
+
+            <a href="https://charada.vercel.app/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🧩</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Charada</div>
+                <div class="card-desc">Decifre a charada do dia. Cada tentativa revela novas pistas para a resposta.</div>
+            </a>
+
+            <a href="https://xingo.site/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🤬</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Xingo</div>
+                <div class="card-desc">Termo com gírias e palavrões brasileiros. Cuidado com o vocabulário!</div>
+            </a>
+
+            <a href="https://palavr.es/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🇪🇸</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Palavr.es</div>
+                <div class="card-desc">Wordle em espanhol. Adivinhe a palavra de 5 letras com as mesmas regras de cores.</div>
+            </a>
+
+            <a href="https://verbete.herokuapp.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">📖</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Verbete</div>
+                <div class="card-desc">Adivinhe a palavra pela definição de dicionário. Cada erro revela mais uma letra.</div>
+            </a>
+
+            <a href="https://www.powerlanguage.co.uk/wordle/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🟩</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Wordle</div>
+                <div class="card-desc">O original que virou febre. Adivinhe a palavra de 5 letras em inglês em 6 tentativas.</div>
+            </a>
+
+            <a href="https://edjefferson.com/letterle/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🔠</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Letterle</div>
+                <div class="card-desc">Adivinhe uma única letra. Cada tentativa dá dica de "maior" ou "menor".</div>
+            </a>
+
+            <a href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🗺️</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Worldle</div>
+                <div class="card-desc">Adivinhe o país pela silhueta. Cada erro mostra distância e direção do correto.</div>
+            </a>
+
+            <a href="https://globle-game.com/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🌍</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Globle</div>
+                <div class="card-desc">Adivinhe o país do dia no mapa. As cores mostram o quão perto você está.</div>
+            </a>
+
+            <a href="https://ducc.pythonanywhere.com/flaggle/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
+                <div class="card-header">
+                    <div class="card-icon">🚩</div>
+                    <span class="card-cat">Palavras</span>
+                </div>
+                <div class="card-title">Flaggle</div>
+                <div class="card-desc">Adivinhe o país pela bandeira. Cada erro revela uma nova parte da imagem.</div>
+            </a>
+
+            <!-- JOGOS -->
+            <a href="https://gamedle.wtf/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
+                <div class="card-header">
+                    <div class="card-icon">🎮</div>
+                    <span class="card-cat">Jogos</span>
+                </div>
+                <div class="card-title">Gamedle</div>
+                <div class="card-desc">Adivinhe o jogo pela capa em 6 tentativas. Dicas de franquia e saga ajudam.</div>
+            </a>
+
+            <a href="https://dungleon.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
+                <div class="card-header">
+                    <div class="card-icon">⚔️</div>
+                    <span class="card-cat">Jogos</span>
+                </div>
+                <div class="card-title">Dungleon</div>
+                <div class="card-desc">Adivinhe a composição da masmorra: heróis, monstros, itens e salas.</div>
+            </a>
+
+            <a href="https://n00b.gg/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
+                <div class="card-header">
+                    <div class="card-icon">🖼️</div>
+                    <span class="card-cat">Jogos</span>
+                </div>
+                <div class="card-title">N00b.gg</div>
+                <div class="card-desc">Adivinhe o jogo pela screenshot pixelada. A imagem clareia a cada tentativa.</div>
+            </a>
+
+            <!-- MATEMÁTICA -->
+            <a href="https://nerdlegame.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="matematica">
+                <div class="card-header">
+                    <div class="card-icon">➕</div>
+                    <span class="card-cat">Matemática</span>
+                </div>
+                <div class="card-title">Nerdle</div>
+                <div class="card-desc">Adivinhe a equação completa (números e operadores) em 6 tentativas.</div>
+            </a>
+
+            <a href="https://mathlegame.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="matematica">
+                <div class="card-header">
+                    <div class="card-icon">🔢</div>
+                    <span class="card-cat">Matemática</span>
+                </div>
+                <div class="card-title">Mathle</div>
+                <div class="card-desc">Adivinhe o número do dia com dicas de "maior" ou "menor" a cada tentativa.</div>
+            </a>
+
+            <a href="https://mathler.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="matematica">
+                <div class="card-header">
+                    <div class="card-icon">🟰</div>
+                    <span class="card-cat">Matemática</span>
+                </div>
+                <div class="card-title">Mathler</div>
+                <div class="card-desc">Encontre a equação escondida que resulta no número-alvo mostrado.</div>
+            </a>
+
+            <!-- LIVROS -->
+            <a href="https://dlegames.org/game/guessthebook" target="_blank" rel="noopener noreferrer" class="card green" data-cat="livros">
+                <div class="card-header">
+                    <div class="card-icon">📖</div>
+                    <span class="card-cat">Livros</span>
+                </div>
+                <div class="card-title">Guess the Book</div>
+                <div class="card-desc">Cada erro revela um novo trecho da obra. Adivinhe o título pela descrição.</div>
+            </a>
+
+            <a href="https://www.redactedgame.com/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="livros">
+                <div class="card-header">
+                    <div class="card-icon">✂️</div>
+                    <span class="card-cat">Livros</span>
+                </div>
+                <div class="card-title">Redacted</div>
+                <div class="card-desc">Clássicos com palavras censuradas e dicas de autor, país e ano.</div>
+            </a>
+
+            <!-- ARTIGOS -->
+            <a href="https://artigo.app/" target="_blank" rel="noopener noreferrer" class="card" data-cat="artigos">
+                <div class="card-header">
+                    <div class="card-icon">📄</div>
+                    <span class="card-cat">Artigos</span>
+                </div>
+                <div class="card-title">Artigo.app</div>
+                <div class="card-desc">Descubra o artigo da Wikipédia com palavras censuradas. Cada erro revela mais texto.</div>
+            </a>
+
+            <!-- ORDEM PARANORMAL -->
+            <a href="https://paranordle.com.br/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
+                <div class="card-header">
+                    <div class="card-icon">🔮</div>
+                    <span class="card-cat">Jogos</span>
+                </div>
+                <div class="card-title">Paranordle</div>
+                <div class="card-desc">Adivinhe o personagem do dia de Ordem Paranormal. Dicas de afiliação, elemento e status.</div>
+            </a>
+
+            <!-- CORES -->
+            <a href="https://colorhunch.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="cores">
+                <div class="card-header">
+                    <div class="card-icon">🖼️</div>
+                    <span class="card-cat">Cores</span>
+                </div>
+                <div class="card-title">Color Hunch</div>
+                <div class="card-desc">Reconstrua a cor de uma foto real com sliders de matiz, saturação e brilho.</div>
+            </a>
+
+            <a href="https://gamocean.com/game/toon-tone/" target="_blank" rel="noopener noreferrer" class="card" data-cat="cores">
+                <div class="card-header">
+                    <div class="card-icon">🎭</div>
+                    <span class="card-cat">Cores</span>
+                </div>
+                <div class="card-title">Toon Tone</div>
+                <div class="card-desc">Recrie a cor exata de personagens de desenho animado de memória.</div>
+            </a>
+
+            <a href="https://playgama.com/br/jogo/remember-the-color-a85c-1" target="_blank" rel="noopener noreferrer" class="card" data-cat="cores">
+                <div class="card-header">
+                    <div class="card-icon">🌈</div>
+                    <span class="card-cat">Cores</span>
+                </div>
+                <div class="card-title">Remember the Color</div>
+                <div class="card-desc">Memorize o tom que aparece por alguns segundos e reproduza de memória.</div>
+            </a>
+
+            <!-- OUTROS -->
+            <a href="https://heardle.app/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="outros">
+                <div class="card-header">
+                    <div class="card-icon">🎵</div>
+                    <span class="card-cat">Outros</span>
+                </div>
+                <div class="card-title">Heardle</div>
+                <div class="card-desc">Adivinhe a música do dia ouvindo os primeiros segundos. Cada erro libera mais da faixa.</div>
+            </a>
+
+            <a href="https://musicle.app/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="outros">
+                <div class="card-header">
+                    <div class="card-icon">🎶</div>
+                    <span class="card-cat">Outros</span>
+                </div>
+                <div class="card-title">Musicle</div>
+                <div class="card-desc">Adivinhe a música do dia pelas letras da canção que vão aparecendo.</div>
+            </a>
+
+            <a href="https://contexto.me/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="outros">
+                <div class="card-header">
+                    <div class="card-icon">🧠</div>
+                    <span class="card-cat">Outros</span>
+                </div>
+                <div class="card-title">Contexto</div>
+                <div class="card-desc">Descubra a palavra secreta pelo contexto. Ranking de 1 a 1000 mostra o quão perto você está.</div>
+            </a>
+
+        </div>
+
+        <footer>
+            Feito para a comunidade de streamers e viewers.<br>
+            Todos os links abrem em uma nova aba — <a href="https://term.ooo/" target="_blank" rel="noopener noreferrer">comece pelo Termo</a>.
+        </footer>
+
+    </div>
+
+    <script>
+        // Filtro simples por categoria
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                cards.forEach(card => {
+                    if (filter === 'all' || card.dataset.cat === filter) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
