@@ -6,624 +6,1366 @@
     <title>Daily Games Hub · Jogos Diários dos Streamers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #eef4fb;
-            --bg-alt: #e2ecf8;
+            --bg: #f5f9fd;
+            --bg-deep: #eaf2fa;
             --card: #ffffff;
-            --border: #d4e3f2;
-            --border-hover: #a8c8e8;
 
-            --text: #1a3a5c;
+            --text: #0f2942;
             --text-muted: #5f7d9e;
-            --text-dim: #8fa8c4;
+            --text-dim: #9ab2c9;
 
-            --blue: #7cb9e8;
             --blue-dark: #4a90c2;
             --blue-deep: #2c6b9e;
-            --blue-light: #e3f0fb;
-            --blue-border: #b8d9f0;
+            --blue-soft: #e8f3fc;
+            --blue-glow: rgba(124, 185, 232, 0.35);
 
-            --green: #7dd3a8;
             --green-dark: #4aab7a;
-            --green-deep: #2e8a5c;
-            --green-light: #e4f7ee;
-            --green-border: #b0e5c9;
+            --green-soft: #e6f7ee;
+            --green-glow: rgba(125, 211, 168, 0.35);
 
-            --radius: 18px;
+            --border: #e2ecf5;
+
+            --shadow-sm: 0 1px 2px rgba(15, 41, 66, 0.04);
+            --shadow-lg: 0 20px 40px -20px rgba(15, 41, 66, 0.2);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        [data-theme="dark"] {
+            --bg: #0a121c;
+            --bg-deep: #0e1a26;
+            --card: #14212e;
+
+            --text: #e8f0f8;
+            --text-muted: #8fa7bf;
+            --text-dim: #55708a;
+
+            --blue-dark: #a5d0f0;
+            --blue-deep: #c5e0f5;
+            --blue-soft: #142232;
+            --blue-glow: rgba(124, 185, 232, 0.25);
+
+            --green-dark: #a5e5c4;
+            --green-soft: #12261f;
+            --green-glow: rgba(125, 211, 168, 0.25);
+
+            --border: #1f3145;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 40px -20px rgba(0, 0, 0, 0.7);
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
             background: var(--bg);
             background-image:
-                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 185, 232, 0.25), transparent 70%),
-                radial-gradient(ellipse 60% 40% at 90% 110%, rgba(125, 211, 168, 0.15), transparent 70%);
+                radial-gradient(ellipse 60% 40% at 50% 0%, var(--blue-glow), transparent 70%),
+                radial-gradient(ellipse 40% 30% at 90% 100%, var(--green-glow), transparent 70%);
             background-attachment: fixed;
             color: var(--text);
             font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             line-height: 1.5;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .page {
-            max-width: 1240px;
+            max-width: 1360px;
             margin: 0 auto;
-            padding: 4rem 2rem 5rem;
+            padding: 2.5rem 2.5rem 5rem;
         }
 
-        /* ===== HEADER ===== */
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .logo-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.55rem;
-            padding: 0.5rem 1.15rem;
-            background: #ffffff;
-            border: 1.5px solid var(--blue-border);
-            border-radius: 100px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--blue-deep);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 14px rgba(124, 185, 232, 0.2);
-        }
-
-        .logo-badge .dot {
-            width: 7px;
-            height: 7px;
-            background: var(--green);
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px var(--green-light);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(0.8); }
-        }
-
-        h1 {
-            font-size: clamp(2.2rem, 4.5vw, 3.4rem);
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 1.08;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        h1 .accent-blue { color: var(--blue-dark); }
-        h1 .accent-green { color: var(--green-dark); }
-
-        .subhead {
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            max-width: 620px;
-            margin: 0 auto;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .subhead strong {
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        /* ===== FILTROS ===== */
-        .filters {
+        .topbar {
             display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 2.5rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3.5rem;
         }
 
-        .filter-btn {
-            padding: 0.55rem 1rem;
-            background: #ffffff;
-            border: 1.5px solid var(--border);
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue-deep));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px var(--blue-glow);
+        }
+
+        .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+        .brand-name { font-weight: 800; font-size: 0.9rem; }
+        .brand-tag {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 0.95rem;
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 100px;
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--blue-dark);
+            color: var(--blue-deep);
+            transform: translateY(-1px);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 3rem;
+            align-items: end;
+            margin-bottom: 3.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 4.8rem);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 0.98;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            font-weight: 800;
+            color: var(--blue-dark);
+        }
+
+        .hero h1 .green { color: var(--green-dark); }
+
+        .hero-sub {
+            font-size: 1.02rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.65;
+            font-weight: 500;
+        }
+
+        .hero-sub strong { color: var(--text); font-weight: 700; }
+
+        .hero-counter { text-align: right; }
+
+        .hero-counter .num {
+            font-size: clamp(3.5rem, 7vw, 5.5rem);
+            font-weight: 800;
+            color: var(--blue-dark);
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .hero-counter .lbl {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            margin-top: 0.6rem;
+        }
+
+        .hero-counter.pulse { animation: counterPulse 0.5s ease; }
+
+        @keyframes counterPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 0.9rem 1.1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            flex-wrap: wrap;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.45rem 0.85rem;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .filter-btn .count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 600;
+            opacity: 0.55;
+            padding: 0.05rem 0.35rem;
+            border-radius: 5px;
+            background: var(--bg-deep);
+            transition: all 0.2s ease;
         }
 
         .filter-btn:hover {
-            border-color: var(--blue-border);
             color: var(--blue-deep);
-            background: var(--blue-light);
+            background: var(--blue-soft);
         }
 
         .filter-btn.active {
             background: var(--blue-deep);
-            border-color: var(--blue-deep);
-            color: #ffffff;
+            color: #fff;
         }
 
-        /* ===== GRID ÚNICO ===== */
+        .filter-btn.active .count {
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 1;
+            color: #fff;
+        }
+
+        [data-theme="dark"] .filter-btn.active {
+            background: var(--blue-deep);
+            color: var(--bg);
+        }
+
+        [data-theme="dark"] .filter-btn.active .count {
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--bg);
+        }
+
+        .toolbar-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toolbar-meta .dot-live {
+            width: 6px;
+            height: 6px;
+            background: var(--green-dark);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--green-soft);
+            animation: pulse 2s infinite;
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1rem;
         }
 
+        /* ===== CARD BASE ===== */
         .card {
-            background: var(--card);
-            border: 1.5px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.4rem 1.3rem 1.2rem;
-            text-decoration: none;
-            color: inherit;
+            position: relative;
             display: flex;
             flex-direction: column;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(124, 185, 232, 0.08);
-            position: relative;
+            border-radius: 18px;
+            padding: 1.15rem 1.15rem 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--blue);
-            transition: height 0.25s ease;
-        }
-
-        .card.green::before {
-            background: var(--green);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-hover);
-            box-shadow: 0 16px 28px -14px rgba(74, 144, 194, 0.3);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
 
-        .card:hover::before {
-            height: 5px;
+        /* ===== CORES DOS JOGOS ===== */
+
+        /* Termo */
+        .card.bg-termo { background: #6e5c62; color: #fafaff; }
+        .card.bg-termo .card-title { color: #fafaff; }
+        .card.bg-termo .card-desc { color: rgba(250, 250, 255, 0.8); }
+        .card.bg-termo .card-cat { color: rgba(250, 250, 255, 0.6); }
+        .card.bg-termo .card-num { color: #fafaff; opacity: 0.35; }
+        .card.bg-termo .card-icon { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.15); }
+        .card.bg-termo .card-status { border-color: rgba(255,255,255,0.15); }
+
+        /* Letreco */
+        .card.bg-letreco { background: #ffffff; color: #000000; border-color: #e2e8f0; }
+        .card.bg-letreco .card-title { color: #000000; }
+        .card.bg-letreco .card-desc { color: rgba(0, 0, 0, 0.65); }
+        .card.bg-letreco .card-cat { color: rgba(0, 0, 0, 0.45); }
+        .card.bg-letreco .card-num { color: #000; opacity: 0.2; }
+        .card.bg-letreco .card-icon { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.08); }
+        .card.bg-letreco .card-status { border-color: rgba(0,0,0,0.08); }
+        .card.bg-letreco .card-badge { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); color: #000; }
+        .card.bg-letreco .card-arrow { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); color: #000; }
+        .card.bg-letreco:hover .card-arrow { background: #000; color: #fff; }
+
+        /* Palavra do Dia */
+        .card.bg-palavra { background: #487e4f; color: #121213; }
+        .card.bg-palavra .card-title { color: #121213; }
+        .card.bg-palavra .card-desc { color: rgba(18, 18, 19, 0.8); }
+        .card.bg-palavra .card-cat { color: rgba(18, 18, 19, 0.6); }
+        .card.bg-palavra .card-num { color: #121213; opacity: 0.3; }
+        .card.bg-palavra .card-icon { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); }
+        .card.bg-palavra .card-status { border-color: rgba(255,255,255,0.2); }
+        .card.bg-palavra .card-badge { background: rgba(0,0,0,0.15); border-color: rgba(0,0,0,0.2); color: #121213; }
+        .card.bg-palavra .card-arrow { background: rgba(0,0,0,0.15); border-color: rgba(0,0,0,0.2); color: #121213; }
+        .card.bg-palavra:hover .card-arrow { background: #121213; color: #487e4f; }
+
+        /* Charada */
+        .card.bg-charada { background: #0f172a; color: #334155; }
+        .card.bg-charada .card-title { color: #e2e8f0; }
+        .card.bg-charada .card-desc { color: #94a3b8; }
+        .card.bg-charada .card-cat { color: #475569; }
+        .card.bg-charada .card-num { color: #334155; opacity: 0.6; }
+        .card.bg-charada .card-icon { background: rgba(51, 65, 85, 0.4); border-color: rgba(51, 65, 85, 0.6); }
+        .card.bg-charada .card-status { border-color: rgba(51, 65, 85, 0.5); }
+
+        /* Verbete */
+        .card.bg-verbete { background: #1a1a1a; color: #f0f0f0; }
+        .card.bg-verbete .card-title { color: #f0f0f0; }
+        .card.bg-verbete .card-desc { color: rgba(240, 240, 240, 0.7); }
+        .card.bg-verbete .card-cat { color: rgba(240, 240, 240, 0.5); }
+        .card.bg-verbete .card-num { color: #f0f0f0; opacity: 0.25; }
+        .card.bg-verbete .card-icon { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+        .card.bg-verbete .card-status { border-color: rgba(255,255,255,0.12); }
+
+        /* Wordle */
+        .card.bg-wordle { background: #e3e3e1; color: #6aaa64; border-color: #d4d4d2; }
+        .card.bg-wordle .card-title { color: #6aaa64; }
+        .card.bg-wordle .card-desc { color: rgba(60, 60, 60, 0.75); }
+        .card.bg-wordle .card-cat { color: rgba(106, 170, 100, 0.8); }
+        .card.bg-wordle .card-num { color: #6aaa64; opacity: 0.4; }
+        .card.bg-wordle .card-icon { background: rgba(106, 170, 100, 0.15); border-color: rgba(106, 170, 100, 0.3); }
+        .card.bg-wordle .card-status { border-color: rgba(0,0,0,0.1); }
+        .card.bg-wordle .card-badge { background: rgba(106, 170, 100, 0.15); border-color: rgba(106, 170, 100, 0.3); color: #3d7a3a; }
+        .card.bg-wordle .card-arrow { background: rgba(106, 170, 100, 0.15); border-color: rgba(106, 170, 100, 0.3); color: #6aaa64; }
+        .card.bg-wordle:hover .card-arrow { background: #6aaa64; color: #fff; }
+
+        /* Letterle */
+        .card.bg-letterle { background: #f4f4f0; color: #1a1a1a; }
+        .card.bg-letterle .card-title { color: #1a1a1a; }
+        .card.bg-letterle .card-desc { color: rgba(26, 26, 26, 0.7); }
+        .card.bg-letterle .card-cat { color: rgba(26, 26, 26, 0.5); }
+        .card.bg-letterle .card-num { color: #1a1a1a; opacity: 0.25; }
+        .card.bg-letterle .card-icon { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.08); }
+        .card.bg-letterle .card-status { border-color: rgba(0,0,0,0.08); }
+        .card.bg-letterle .card-badge { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); color: #1a1a1a; }
+        .card.bg-letterle .card-arrow { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.1); color: #1a1a1a; }
+        .card.bg-letterle:hover .card-arrow { background: #1a1a1a; color: #f4f4f0; }
+
+        /* Worldle */
+        .card.bg-worldle { background: #121212; color: #f0f2f5; }
+        .card.bg-worldle .card-title { color: #f0f2f5; }
+        .card.bg-worldle .card-desc { color: rgba(240, 242, 245, 0.7); }
+        .card.bg-worldle .card-cat { color: rgba(240, 242, 245, 0.5); }
+        .card.bg-worldle .card-num { color: #f0f2f5; opacity: 0.25; }
+        .card.bg-worldle .card-icon { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+        .card.bg-worldle .card-status { border-color: rgba(255,255,255,0.12); }
+
+        /* Globle */
+        .card.bg-globle { background: #afe0ed; color: #e2e3cb; border-color: #9dd0dd; }
+        .card.bg-globle .card-title { color: #2c5a6b; }
+        .card.bg-globle .card-desc { color: rgba(44, 90, 107, 0.75); }
+        .card.bg-globle .card-cat { color: rgba(44, 90, 107, 0.6); }
+        .card.bg-globle .card-num { color: #2c5a6b; opacity: 0.3; }
+        .card.bg-globle .card-icon { background: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.6); }
+        .card.bg-globle .card-status { border-color: rgba(44, 90, 107, 0.15); }
+        .card.bg-globle .card-badge { background: rgba(255,255,255,0.45); border-color: rgba(255,255,255,0.6); color: #2c5a6b; }
+        .card.bg-globle .card-arrow { background: rgba(255,255,255,0.45); border-color: rgba(255,255,255,0.6); color: #2c5a6b; }
+        .card.bg-globle:hover .card-arrow { background: #2c5a6b; color: #afe0ed; }
+
+        /* Flaggle */
+        .card.bg-flaggle { background: #88d56f; color: #ffffff; border-color: #7ac261; }
+        .card.bg-flaggle .card-title { color: #ffffff; }
+        .card.bg-flaggle .card-desc { color: rgba(255, 255, 255, 0.9); }
+        .card.bg-flaggle .card-cat { color: rgba(255, 255, 255, 0.75); }
+        .card.bg-flaggle .card-num { color: #ffffff; opacity: 0.4; }
+        .card.bg-flaggle .card-icon { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); }
+        .card.bg-flaggle .card-status { border-color: rgba(255,255,255,0.25); }
+
+        /* Gamedle (fundo #51bee9 + texto #0658c8) */
+        .card.bg-gamedle { background: #51bee9; color: #0658c8; border-color: #3da8d4; }
+        .card.bg-gamedle .card-title { color: #0658c8; }
+        .card.bg-gamedle .card-desc { color: #0658c8; opacity: 0.85; }
+        .card.bg-gamedle .card-cat { color: #0658c8; opacity: 0.7; }
+        .card.bg-gamedle .card-num { color: #0658c8; opacity: 0.5; }
+        .card.bg-gamedle .card-icon { background: rgba(6, 88, 200, 0.12); border-color: rgba(6, 88, 200, 0.25); }
+        .card.bg-gamedle .card-status { border-color: rgba(6, 88, 200, 0.2); }
+        .card.bg-gamedle .card-badge { background: rgba(6, 88, 200, 0.12); border-color: rgba(6, 88, 200, 0.25); color: #0658c8; }
+        .card.bg-gamedle .card-arrow { background: rgba(6, 88, 200, 0.12); border-color: rgba(6, 88, 200, 0.25); color: #0658c8; }
+        .card.bg-gamedle:hover .card-arrow { background: #0658c8; color: #51bee9; }
+
+        /* Dungleon */
+        .card.bg-dungleon { background: #1e2122; color: #939399; }
+        .card.bg-dungleon .card-title { color: #e8eaeb; }
+        .card.bg-dungleon .card-desc { color: #939399; }
+        .card.bg-dungleon .card-cat { color: #6b6b72; }
+        .card.bg-dungleon .card-num { color: #939399; opacity: 0.5; }
+        .card.bg-dungleon .card-icon { background: rgba(147, 147, 153, 0.15); border-color: rgba(147, 147, 153, 0.25); }
+        .card.bg-dungleon .card-status { border-color: rgba(147, 147, 153, 0.2); }
+        .card.bg-dungleon .card-badge { background: rgba(147, 147, 153, 0.15); border-color: rgba(147, 147, 153, 0.25); color: #939399; }
+        .card.bg-dungleon .card-arrow { background: rgba(147, 147, 153, 0.15); border-color: rgba(147, 147, 153, 0.25); color: #939399; }
+        .card.bg-dungleon:hover .card-arrow { background: #939399; color: #1e2122; }
+
+        /* N00b.gg */
+        .card.bg-n00b { background: #1b1a32; color: #080817; }
+        .card.bg-n00b .card-title { color: #e8e8f0; }
+        .card.bg-n00b .card-desc { color: #8a8a9e; }
+        .card.bg-n00b .card-cat { color: #5c5c72; }
+        .card.bg-n00b .card-num { color: #080817; opacity: 0.8; }
+        .card.bg-n00b .card-icon { background: rgba(8, 8, 23, 0.6); border-color: rgba(8, 8, 23, 0.8); }
+        .card.bg-n00b .card-status { border-color: rgba(8, 8, 23, 0.5); }
+        .card.bg-n00b .card-badge { background: rgba(8, 8, 23, 0.6); border-color: rgba(8, 8, 23, 0.8); color: #8a8a9e; }
+        .card.bg-n00b .card-arrow { background: rgba(8, 8, 23, 0.6); border-color: rgba(8, 8, 23, 0.8); color: #8a8a9e; }
+        .card.bg-n00b:hover .card-arrow { background: #080817; color: #e8e8f0; }
+
+        /* Paranordle */
+        .card.bg-paranordle { background: #280100; color: #ffffff; }
+        .card.bg-paranordle .card-title { color: #ffffff; }
+        .card.bg-paranordle .card-desc { color: rgba(255, 255, 255, 0.8); }
+        .card.bg-paranordle .card-cat { color: rgba(255, 255, 255, 0.6); }
+        .card.bg-paranordle .card-num { color: #ffffff; opacity: 0.35; }
+        .card.bg-paranordle .card-icon { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.18); }
+        .card.bg-paranordle .card-status { border-color: rgba(255, 255, 255, 0.18); }
+
+        /* Nerdle (#cfd1d7 fundo / #ffffff texto) */
+        .card.bg-nerdle { background: #cfd1d7; color: #ffffff; border-color: #bcc0c8; }
+        .card.bg-nerdle .card-title { 
+            color: #ffffff; 
+            text-shadow: 0 1px 4px rgba(15, 41, 66, 0.55), 0 0 16px rgba(15, 41, 66, 0.3);
+        }
+        .card.bg-nerdle .card-desc { 
+            color: #ffffff; 
+            text-shadow: 0 1px 3px rgba(15, 41, 66, 0.5);
+            opacity: 0.98;
+        }
+        .card.bg-nerdle .card-cat { 
+            color: #ffffff; 
+            text-shadow: 0 1px 3px rgba(15, 41, 66, 0.5);
+            opacity: 0.9;
+        }
+        .card.bg-nerdle .card-num { 
+            color: #ffffff; 
+            opacity: 0.95;
+            text-shadow: 0 1px 3px rgba(15, 41, 66, 0.5);
+        }
+        .card.bg-nerdle .card-icon { 
+            background: rgba(255, 255, 255, 0.85); 
+            border-color: rgba(255, 255, 255, 1);
+        }
+        .card.bg-nerdle .card-status { border-color: rgba(15, 41, 66, 0.18); }
+        .card.bg-nerdle .card-badge { 
+            background: rgba(255, 255, 255, 0.85); 
+            border-color: rgba(255, 255, 255, 1); 
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(15, 41, 66, 0.55);
+        }
+        .card.bg-nerdle .card-arrow { 
+            background: rgba(255, 255, 255, 0.85); 
+            border-color: rgba(255, 255, 255, 1); 
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(15, 41, 66, 0.55);
+        }
+        .card.bg-nerdle:hover .card-arrow { 
+            background: #1a3a5c; 
+            color: #cfd1d7;
+            text-shadow: none;
         }
 
-        .card-header {
+        /* Mathle */
+        .card.bg-mathle { background: #dbeafe; color: #ffffff; border-color: #c7ddf8; }
+        .card.bg-mathle .card-title { color: #1e3a8a; }
+        .card.bg-mathle .card-desc { color: rgba(30, 58, 138, 0.75); }
+        .card.bg-mathle .card-cat { color: rgba(30, 58, 138, 0.6); }
+        .card.bg-mathle .card-num { color: #1e3a8a; opacity: 0.4; }
+        .card.bg-mathle .card-icon { background: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.8); }
+        .card.bg-mathle .card-status { border-color: rgba(30, 58, 138, 0.15); }
+        .card.bg-mathle .card-badge { background: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.8); color: #1e3a8a; }
+        .card.bg-mathle .card-arrow { background: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.8); color: #1e3a8a; }
+        .card.bg-mathle:hover .card-arrow { background: #1e3a8a; color: #ffffff; }
+
+        /* Mathler */
+        .card.bg-mathler { background: #3a3f47; color: #7edc64; }
+        .card.bg-mathler .card-title { color: #7edc64; }
+        .card.bg-mathler .card-desc { color: rgba(126, 220, 100, 0.7); }
+        .card.bg-mathler .card-cat { color: rgba(126, 220, 100, 0.55); }
+        .card.bg-mathler .card-num { color: #7edc64; opacity: 0.4; }
+        .card.bg-mathler .card-icon { background: rgba(126, 220, 100, 0.15); border-color: rgba(126, 220, 100, 0.25); }
+        .card.bg-mathler .card-status { border-color: rgba(126, 220, 100, 0.2); }
+        .card.bg-mathler .card-badge { background: rgba(126, 220, 100, 0.15); border-color: rgba(126, 220, 100, 0.25); color: #7edc64; }
+        .card.bg-mathler .card-arrow { background: rgba(126, 220, 100, 0.15); border-color: rgba(126, 220, 100, 0.25); color: #7edc64; }
+        .card.bg-mathler:hover .card-arrow { background: #7edc64; color: #3a3f47; }
+
+        /* Guess the Book */
+        .card.bg-book { background: #000000; color: #ffffff; border-color: #1a1a1a; }
+        .card.bg-book .card-title { color: #ffffff; }
+        .card.bg-book .card-desc { color: rgba(255, 255, 255, 0.7); }
+        .card.bg-book .card-cat { color: rgba(255, 255, 255, 0.5); }
+        .card.bg-book .card-num { color: #ffffff; opacity: 0.25; }
+        .card.bg-book .card-icon { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+        .card.bg-book .card-status { border-color: rgba(255,255,255,0.12); }
+
+        /* Redacted */
+        .card.bg-redacted { background: #efe9d5; color: #0c1220; border-color: #e0d9c2; }
+        .card.bg-redacted .card-title { color: #0c1220; }
+        .card.bg-redacted .card-desc { color: rgba(12, 18, 32, 0.7); }
+        .card.bg-redacted .card-cat { color: rgba(12, 18, 32, 0.55); }
+        .card.bg-redacted .card-num { color: #0c1220; opacity: 0.35; }
+        .card.bg-redacted .card-icon { background: rgba(12, 18, 32, 0.08); border-color: rgba(12, 18, 32, 0.12); }
+        .card.bg-redacted .card-status { border-color: rgba(12, 18, 32, 0.12); }
+        .card.bg-redacted .card-badge { background: rgba(12, 18, 32, 0.08); border-color: rgba(12, 18, 32, 0.12); color: #0c1220; }
+        .card.bg-redacted .card-arrow { background: rgba(12, 18, 32, 0.08); border-color: rgba(12, 18, 32, 0.12); color: #0c1220; }
+        .card.bg-redacted:hover .card-arrow { background: #0c1220; color: #efe9d5; }
+
+        /* Artigo.app */
+        .card.bg-artigo { background: #dddddd; color: #0b0a0f; border-color: #cbcbcb; }
+        .card.bg-artigo .card-title { color: #0b0a0f; }
+        .card.bg-artigo .card-desc { color: rgba(11, 10, 15, 0.7); }
+        .card.bg-artigo .card-cat { color: rgba(11, 10, 15, 0.55); }
+        .card.bg-artigo .card-num { color: #0b0a0f; opacity: 0.35; }
+        .card.bg-artigo .card-icon { background: rgba(11, 10, 15, 0.08); border-color: rgba(11, 10, 15, 0.12); }
+        .card.bg-artigo .card-status { border-color: rgba(11, 10, 15, 0.12); }
+        .card.bg-artigo .card-badge { background: rgba(11, 10, 15, 0.08); border-color: rgba(11, 10, 15, 0.12); color: #0b0a0f; }
+        .card.bg-artigo .card-arrow { background: rgba(11, 10, 15, 0.08); border-color: rgba(11, 10, 15, 0.12); color: #0b0a0f; }
+        .card.bg-artigo:hover .card-arrow { background: #0b0a0f; color: #dddddd; }
+
+        /* Color Hunch */
+        .card.bg-color { background: #176c7e; color: #141e7b; }
+        .card.bg-color .card-title { color: #e0f5fa; }
+        .card.bg-color .card-desc { color: rgba(224, 245, 250, 0.75); }
+        .card.bg-color .card-cat { color: rgba(224, 245, 250, 0.55); }
+        .card.bg-color .card-num { color: #141e7b; opacity: 0.8; }
+        .card.bg-color .card-icon { background: rgba(20, 30, 123, 0.4); border-color: rgba(20, 30, 123, 0.6); }
+        .card.bg-color .card-status { border-color: rgba(20, 30, 123, 0.4); }
+        .card.bg-color .card-badge { background: rgba(20, 30, 123, 0.4); border-color: rgba(20, 30, 123, 0.6); color: #e0f5fa; }
+        .card.bg-color .card-arrow { background: rgba(20, 30, 123, 0.4); border-color: rgba(20, 30, 123, 0.6); color: #e0f5fa; }
+        .card.bg-color:hover .card-arrow { background: #e0f5fa; color: #176c7e; }
+
+        /* Toon Tone */
+        .card.bg-toon { background: #0c1623; color: #070d17; }
+        .card.bg-toon .card-title { color: #e8eef6; }
+        .card.bg-toon .card-desc { color: #8fa0b5; }
+        .card.bg-toon .card-cat { color: #5c6a80; }
+        .card.bg-toon .card-num { color: #070d17; opacity: 0.9; }
+        .card.bg-toon .card-icon { background: rgba(7, 13, 23, 0.7); border-color: rgba(7, 13, 23, 0.9); }
+        .card.bg-toon .card-status { border-color: rgba(7, 13, 23, 0.6); }
+        .card.bg-toon .card-badge { background: rgba(7, 13, 23, 0.7); border-color: rgba(7, 13, 23, 0.9); color: #8fa0b5; }
+        .card.bg-toon .card-arrow { background: rgba(7, 13, 23, 0.7); border-color: rgba(7, 13, 23, 0.9); color: #8fa0b5; }
+        .card.bg-toon:hover .card-arrow { background: #070d17; color: #e8eef6; }
+
+        /* Musicle */
+        .card.bg-musicle { background: #ffffff; color: #444444; border-color: #e5e5e5; }
+        .card.bg-musicle .card-title { color: #444444; }
+        .card.bg-musicle .card-desc { color: rgba(68, 68, 68, 0.7); }
+        .card.bg-musicle .card-cat { color: rgba(68, 68, 68, 0.5); }
+        .card.bg-musicle .card-num { color: #444444; opacity: 0.3; }
+        .card.bg-musicle .card-icon { background: rgba(68, 68, 68, 0.06); border-color: rgba(68, 68, 68, 0.1); }
+        .card.bg-musicle .card-status { border-color: rgba(68, 68, 68, 0.1); }
+        .card.bg-musicle .card-badge { background: rgba(68, 68, 68, 0.06); border-color: rgba(68, 68, 68, 0.1); color: #444444; }
+        .card.bg-musicle .card-arrow { background: rgba(68, 68, 68, 0.06); border-color: rgba(68, 68, 68, 0.1); color: #444444; }
+        .card.bg-musicle:hover .card-arrow { background: #444444; color: #ffffff; }
+
+        /* Contexto */
+        .card.bg-contexto { background: #0f172a; color: #ffffff; }
+        .card.bg-contexto .card-title { color: #ffffff; }
+        .card.bg-contexto .card-desc { color: rgba(255, 255, 255, 0.7); }
+        .card.bg-contexto .card-cat { color: rgba(255, 255, 255, 0.5); }
+        .card.bg-contexto .card-num { color: #fff; opacity: 0.3; }
+        .card.bg-contexto .card-icon { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.25); }
+        .card.bg-contexto .card-status { border-color: rgba(255,255,255,0.1); }
+
+        /* ===== ELEMENTOS INTERNOS ===== */
+        .card-head {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
+            margin-bottom: 1.1rem;
         }
 
         .card-icon {
-            font-size: 2rem;
+            position: relative;
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
             line-height: 1;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid;
+            backdrop-filter: blur(6px);
         }
 
         .card:hover .card-icon {
-            transform: scale(1.12) rotate(-4deg);
+            transform: scale(1.08) rotate(-6deg);
+        }
+
+        .card-id {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
         }
 
         .card-cat {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.62rem;
-            font-weight: 800;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 0.28rem 0.6rem;
-            border-radius: 6px;
-            background: var(--blue-light);
-            color: var(--blue-deep);
-            border: 1px solid var(--blue-border);
-        }
-
-        .card.green .card-cat {
-            background: var(--green-light);
-            color: var(--green-deep);
-            border-color: var(--green-border);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.15rem;
         }
 
         .card-title {
-            font-weight: 800;
             font-size: 1.05rem;
+            font-weight: 800;
             letter-spacing: -0.02em;
-            color: var(--text);
-            margin-bottom: 0.35rem;
+            line-height: 1.15;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card:hover .card-title { opacity: 0.85; }
+
+        .card-num {
+            position: absolute;
+            top: 0.6rem;
+            right: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            z-index: 1;
         }
 
         .card-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.55;
+            font-size: 0.82rem;
             font-weight: 500;
+            line-height: 1.55;
             flex: 1;
+            margin-bottom: 1rem;
         }
 
-        /* ===== FOOTER ===== */
+        .card-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.9rem;
+            border-top: 1px solid;
+        }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card-badge .badge-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        .card-arrow {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.72rem;
+            font-weight: 800;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card:hover .card-arrow {
+            transform: rotate(-45deg);
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+        }
+
         footer {
             margin-top: 4rem;
             padding-top: 2rem;
-            border-top: 1.5px solid var(--border);
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            line-height: 1.7;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
 
-        footer a {
+        .footer-msg {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .footer-msg a {
             color: var(--blue-dark);
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
         }
 
-        footer a:hover {
-            color: var(--green-dark);
+        .footer-msg a:hover { color: var(--green-dark); }
+
+        .credit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: color 0.2s ease;
         }
 
-        /* ===== RESPONSIVO ===== */
-        @media (max-width: 640px) {
-            .page {
-                padding: 2.5rem 1.1rem 4rem;
+        .credit:hover { color: var(--blue-dark); }
+
+        .credit-handle {
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        .credit:hover .credit-handle { color: var(--blue-dark); }
+
+        .credit-arrow {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+            display: inline-block;
+        }
+
+        .credit:hover .credit-arrow { transform: translate(2px, -2px); }
+
+        @media (max-width: 800px) {
+            .page { padding: 1.8rem 1.2rem 4rem; }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-bottom: 2.5rem;
             }
+
+            .hero-counter { text-align: left; }
+            .hero-counter .num { font-size: 3.5rem; }
+            .hero h1 { font-size: 2.4rem; }
+            .hero-sub { font-size: 0.95rem; }
+
+            .toolbar { padding: 0.75rem; gap: 0.75rem; }
+            .toolbar-meta { display: none; }
 
             .grid {
                 grid-template-columns: 1fr;
-                gap: 0.85rem;
+                gap: 0.75rem;
             }
 
-            h1 {
-                font-size: 1.9rem;
-            }
+            .card { padding: 1rem; }
+            .card-icon { width: 46px; height: 46px; font-size: 1.4rem; }
+            .card-title { font-size: 0.98rem; }
+            .card-desc { font-size: 0.78rem; }
 
-            .subhead {
-                font-size: 0.95rem;
-            }
+            footer { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
     <div class="page">
 
-        <!-- HEADER -->
-        <header>
-            <div class="logo-badge">
-                <span class="dot"></span>
-                Hub dos Streamers
+        <div class="topbar">
+            <div class="brand">
+                <div class="brand-mark">◆</div>
+                <div class="brand-text">
+                    <span class="brand-name">Daily Games Hub</span>
+                    <span class="brand-tag">Curadoria de jogos diários</span>
+                </div>
             </div>
-            <h1>
-                Jogos diários. <span class="accent-blue">Um só</span> <span class="accent-green">lugar</span>.
-            </h1>
-            <p class="subhead">
-                Os desafios que os streamers amam — palavras, jogos, livros, músicas, artigos e cores. Clique em qualquer card para jogar.
-            </p>
-        </header>
-
-        <!-- FILTROS -->
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">Todos</button>
-            <button class="filter-btn" data-filter="palavras">Palavras</button>
-            <button class="filter-btn" data-filter="jogos">Jogos</button>
-            <button class="filter-btn" data-filter="matematica">Matemática</button>
-            <button class="filter-btn" data-filter="livros">Livros</button>
-            <button class="filter-btn" data-filter="artigos">Artigos</button>
-            <button class="filter-btn" data-filter="cores">Cores</button>
-            <button class="filter-btn" data-filter="outros">Outros</button>
+            <button class="theme-toggle" id="themeToggle">
+                <span id="themeIcon">🌙</span>
+                <span id="themeLabel">Modo escuro</span>
+            </button>
         </div>
 
-        <!-- GRID ÚNICO -->
+        <div class="hero">
+            <div>
+                <h1>
+                    Adivinhe.<br>
+                    <em>Todo dia.</em><br>
+                    <span class="green">Um só lugar.</span>
+                </h1>
+                <p class="hero-sub">
+                    Os desafios diários que os streamers amam — <strong>palavras, jogos, livros, músicas, artigos e cores</strong>. Clique em qualquer ficha para jogar em nova aba.
+                </p>
+            </div>
+            <div class="hero-counter" id="heroCounter">
+                <span class="num" id="statTotal">0</span>
+                <div class="lbl" id="statLabel">Jogos catalogados</div>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="filters" id="filters">
+                <button class="filter-btn active" data-filter="all">Todos <span class="count" data-count="all">0</span></button>
+                <button class="filter-btn" data-filter="palavras">Palavras <span class="count" data-count="palavras">0</span></button>
+                <button class="filter-btn" data-filter="jogos">Jogos <span class="count" data-count="jogos">0</span></button>
+                <button class="filter-btn" data-filter="matematica">Matemática <span class="count" data-count="matematica">0</span></button>
+                <button class="filter-btn" data-filter="livros">Livros <span class="count" data-count="livros">0</span></button>
+                <button class="filter-btn" data-filter="artigos">Artigos <span class="count" data-count="artigos">0</span></button>
+                <button class="filter-btn" data-filter="cores">Cores <span class="count" data-count="cores">0</span></button>
+                <button class="filter-btn" data-filter="outros">Outros <span class="count" data-count="outros">0</span></button>
+            </div>
+            <div class="toolbar-meta">
+                <span class="dot-live"></span>
+                Atualizado diariamente
+            </div>
+        </div>
+
         <div class="grid" id="grid">
 
-            <!-- PALAVRAS PT-BR -->
-            <a href="https://term.ooo/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <!-- PALAVRAS -->
+            <a href="https://term.ooo/" target="_blank" rel="noopener noreferrer" class="card bg-termo" data-cat="palavras">
+                <span class="card-num">#01</span>
+                <div class="card-head">
                     <div class="card-icon">🇧🇷</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · PT-BR</span>
+                        <span class="card-title">Termo</span>
+                    </div>
                 </div>
-                <div class="card-title">Termo</div>
-                <div class="card-desc">Adivinhe a palavra de 5 letras em 6 tentativas. Verde = certa no lugar; amarelo = certa no lugar errado.</div>
+                <div class="card-desc">O clássico brasileiro: adivinhe a palavra secreta de 5 letras em até 6 chutes. Verde acerta o lugar, amarelo avisa que a letra existe.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://term.ooo/2/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://term.ooo/2/" target="_blank" rel="noopener noreferrer" class="card bg-termo" data-cat="palavras">
+                <span class="card-num">#02</span>
+                <div class="card-head">
                     <div class="card-icon">2️⃣</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · PT-BR</span>
+                        <span class="card-title">Termo de 2</span>
+                    </div>
                 </div>
-                <div class="card-title">Termo de 2</div>
-                <div class="card-desc">Versão com palavras de 6 letras. Mesma lógica de cores do Termo original.</div>
+                <div class="card-desc">Mesma mecânica, mas com palavras de 6 letras. Mais uma peça no quebra-cabeça pra você desvendar.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://term.ooo/4/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://term.ooo/4/" target="_blank" rel="noopener noreferrer" class="card bg-termo" data-cat="palavras">
+                <span class="card-num">#03</span>
+                <div class="card-head">
                     <div class="card-icon">4️⃣</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · PT-BR</span>
+                        <span class="card-title">Termo de 4</span>
+                    </div>
                 </div>
-                <div class="card-title">Termo de 4</div>
-                <div class="card-desc">Modo difícil com palavras de 7 letras. Para quem já domina o Termo normal.</div>
+                <div class="card-desc">Modo hardcore: 7 letras por palavra. Reservado para quem já dominou o Termo original.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://gabtoschi.com/letreco/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://gabtoschi.com/letreco/" target="_blank" rel="noopener noreferrer" class="card bg-letreco" data-cat="palavras">
+                <span class="card-num">#04</span>
+                <div class="card-head">
                     <div class="card-icon">🔤</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · PT-BR</span>
+                        <span class="card-title">Letreco</span>
+                    </div>
                 </div>
-                <div class="card-title">Letreco</div>
-                <div class="card-desc">Alternativa brasileira ao Wordle. Use as dicas de cores para acertar a palavra do dia.</div>
+                <div class="card-desc">A versão brasileira do Wordle, com 5 letras e dicionário PT-BR. Perfeito pra treinar o vocabulário.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://palavra-do-dia.pt/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://palavra-do-dia.pt/" target="_blank" rel="noopener noreferrer" class="card bg-palavra" data-cat="palavras">
+                <span class="card-num">#05</span>
+                <div class="card-head">
                     <div class="card-icon">📅</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · PT</span>
+                        <span class="card-title">Palavra do Dia</span>
+                    </div>
                 </div>
-                <div class="card-title">Palavra do Dia</div>
-                <div class="card-desc">Versão portuguesa do Termo. Adivinhe a palavra de 5 letras com feedback de cores.</div>
+                <div class="card-desc">O Termo com sotaque português. Uma palavra de 5 letras por dia, com feedback de cores.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://charada.vercel.app/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://charada.vercel.app/" target="_blank" rel="noopener noreferrer" class="card bg-charada" data-cat="palavras">
+                <span class="card-num">#06</span>
+                <div class="card-head">
                     <div class="card-icon">🧩</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Enigma</span>
+                        <span class="card-title">Charada</span>
+                    </div>
                 </div>
-                <div class="card-title">Charada</div>
-                <div class="card-desc">Decifre a charada do dia. Cada tentativa revela novas pistas para a resposta.</div>
+                <div class="card-desc">Um enigma por dia. Cada tentativa errada revela mais pistas até você desvendar a resposta.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://xingo.site/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
-                    <div class="card-icon">🤬</div>
-                    <span class="card-cat">Palavras</span>
-                </div>
-                <div class="card-title">Xingo</div>
-                <div class="card-desc">Termo com gírias e palavrões brasileiros. Cuidado com o vocabulário!</div>
-            </a>
-
-            <a href="https://palavr.es/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
-                    <div class="card-icon">🇪🇸</div>
-                    <span class="card-cat">Palavras</span>
-                </div>
-                <div class="card-title">Palavr.es</div>
-                <div class="card-desc">Wordle em espanhol. Adivinhe a palavra de 5 letras com as mesmas regras de cores.</div>
-            </a>
-
-            <a href="https://verbete.herokuapp.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://verbete.herokuapp.com/" target="_blank" rel="noopener noreferrer" class="card bg-verbete" data-cat="palavras">
+                <span class="card-num">#07</span>
+                <div class="card-head">
                     <div class="card-icon">📖</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Dicionário</span>
+                        <span class="card-title">Verbete</span>
+                    </div>
                 </div>
-                <div class="card-title">Verbete</div>
-                <div class="card-desc">Adivinhe a palavra pela definição de dicionário. Cada erro revela mais uma letra.</div>
+                <div class="card-desc">Adivinhe a palavra pela definição do dicionário. Cada erro revela uma nova letra da resposta.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://www.powerlanguage.co.uk/wordle/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer" class="card bg-wordle" data-cat="palavras">
+                <span class="card-num">#08</span>
+                <div class="card-head">
                     <div class="card-icon">🟩</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Original</span>
+                        <span class="card-title">Wordle</span>
+                    </div>
                 </div>
-                <div class="card-title">Wordle</div>
-                <div class="card-desc">O original que virou febre. Adivinhe a palavra de 5 letras em inglês em 6 tentativas.</div>
+                <div class="card-desc">O jogo que virou febre mundial. 5 letras em inglês, 6 tentativas, uma palavra por dia.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://edjefferson.com/letterle/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://edjefferson.com/letterle/" target="_blank" rel="noopener noreferrer" class="card bg-letterle" data-cat="palavras">
+                <span class="card-num">#09</span>
+                <div class="card-head">
                     <div class="card-icon">🔠</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Letra</span>
+                        <span class="card-title">Letterle</span>
+                    </div>
                 </div>
-                <div class="card-title">Letterle</div>
-                <div class="card-desc">Adivinhe uma única letra. Cada tentativa dá dica de "maior" ou "menor".</div>
+                <div class="card-desc">Um jogo para quem tem paciência: adivinhe uma única letra do alfabeto com dicas de maior/menor.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener noreferrer" class="card bg-worldle" data-cat="palavras">
+                <span class="card-num">#10</span>
+                <div class="card-head">
                     <div class="card-icon">🗺️</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Geo</span>
+                        <span class="card-title">Worldle</span>
+                    </div>
                 </div>
-                <div class="card-title">Worldle</div>
-                <div class="card-desc">Adivinhe o país pela silhueta. Cada erro mostra distância e direção do correto.</div>
+                <div class="card-desc">Adivinhe o país pela silhueta. Cada erro mostra a distância e a direção até o lugar certo.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://globle-game.com/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://globle-game.com/" target="_blank" rel="noopener noreferrer" class="card bg-globle" data-cat="palavras">
+                <span class="card-num">#11</span>
+                <div class="card-head">
                     <div class="card-icon">🌍</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Geo</span>
+                        <span class="card-title">Globle</span>
+                    </div>
                 </div>
-                <div class="card-title">Globle</div>
-                <div class="card-desc">Adivinhe o país do dia no mapa. As cores mostram o quão perto você está.</div>
+                <div class="card-desc">O mapa-múndi como tabuleiro: adivinhe o país do dia e veja o calor das cores esquentando.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://ducc.pythonanywhere.com/flaggle/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="palavras">
-                <div class="card-header">
+            <a href="https://ducc.pythonanywhere.com/flaggle/" target="_blank" rel="noopener noreferrer" class="card bg-flaggle" data-cat="palavras">
+                <span class="card-num">#12</span>
+                <div class="card-head">
                     <div class="card-icon">🚩</div>
-                    <span class="card-cat">Palavras</span>
+                    <div class="card-id">
+                        <span class="card-cat">Palavras · Flags</span>
+                        <span class="card-title">Flaggle</span>
+                    </div>
                 </div>
-                <div class="card-title">Flaggle</div>
-                <div class="card-desc">Adivinhe o país pela bandeira. Cada erro revela uma nova parte da imagem.</div>
+                <div class="card-desc">Adivinhe o país pela bandeira, que vai sendo revelada em pedaços a cada erro.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
             <!-- JOGOS -->
-            <a href="https://gamedle.wtf/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
-                <div class="card-header">
+            <a href="https://gamedle.wtf/" target="_blank" rel="noopener noreferrer" class="card bg-gamedle" data-cat="jogos">
+                <span class="card-num">#13</span>
+                <div class="card-head">
                     <div class="card-icon">🎮</div>
-                    <span class="card-cat">Jogos</span>
+                    <div class="card-id">
+                        <span class="card-cat">Jogos · Capa</span>
+                        <span class="card-title">Gamedle</span>
+                    </div>
                 </div>
-                <div class="card-title">Gamedle</div>
-                <div class="card-desc">Adivinhe o jogo pela capa em 6 tentativas. Dicas de franquia e saga ajudam.</div>
+                <div class="card-desc">Adivinhe o videogame pela capa em até 6 tentativas. Dicas de franquia, saga e gênero aparecem conforme você erra.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://dungleon.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
-                <div class="card-header">
+            <a href="https://dungleon.com/" target="_blank" rel="noopener noreferrer" class="card bg-dungleon" data-cat="jogos">
+                <span class="card-num">#14</span>
+                <div class="card-head">
                     <div class="card-icon">⚔️</div>
-                    <span class="card-cat">Jogos</span>
+                    <div class="card-id">
+                        <span class="card-cat">Jogos · RPG</span>
+                        <span class="card-title">Dungleon</span>
+                    </div>
                 </div>
-                <div class="card-title">Dungleon</div>
-                <div class="card-desc">Adivinhe a composição da masmorra: heróis, monstros, itens e salas.</div>
+                <div class="card-desc">Monte a masmorra do dia: heróis, monstros, itens e salas. Um RPG diário em formato de puzzle.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://n00b.gg/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
-                <div class="card-header">
+            <a href="https://n00b.gg/" target="_blank" rel="noopener noreferrer" class="card bg-n00b" data-cat="jogos">
+                <span class="card-num">#15</span>
+                <div class="card-head">
                     <div class="card-icon">🖼️</div>
-                    <span class="card-cat">Jogos</span>
+                    <div class="card-id">
+                        <span class="card-cat">Jogos · Pixel</span>
+                        <span class="card-title">N00b.gg</span>
+                    </div>
                 </div>
-                <div class="card-title">N00b.gg</div>
-                <div class="card-desc">Adivinhe o jogo pela screenshot pixelada. A imagem clareia a cada tentativa.</div>
+                <div class="card-desc">Screenshot pixelado, jogo desconhecido. Cada tentativa revela mais da imagem até você reconhecer.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
+            </a>
+
+            <a href="https://paranordle.com.br/" target="_blank" rel="noopener noreferrer" class="card bg-paranordle" data-cat="jogos">
+                <span class="card-num">#16</span>
+                <div class="card-head">
+                    <div class="card-icon">🔮</div>
+                    <div class="card-id">
+                        <span class="card-cat">Jogos · Ordem</span>
+                        <span class="card-title">Paranordle</span>
+                    </div>
+                </div>
+                <div class="card-desc">Adivinhe o personagem do dia de Ordem Paranormal. Dicas de afiliação, elemento e status a cada erro.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
             <!-- MATEMÁTICA -->
-            <a href="https://nerdlegame.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="matematica">
-                <div class="card-header">
+            <a href="https://nerdlegame.com/" target="_blank" rel="noopener noreferrer" class="card bg-nerdle" data-cat="matematica">
+                <span class="card-num">#17</span>
+                <div class="card-head">
                     <div class="card-icon">➕</div>
-                    <span class="card-cat">Matemática</span>
+                    <div class="card-id">
+                        <span class="card-cat">Matemática · Equação</span>
+                        <span class="card-title">Nerdle</span>
+                    </div>
                 </div>
-                <div class="card-title">Nerdle</div>
-                <div class="card-desc">Adivinhe a equação completa (números e operadores) em 6 tentativas.</div>
+                <div class="card-desc">O Termo da matemática: descubra a equação escondida em 6 tentativas usando números e operadores.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://mathlegame.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="matematica">
-                <div class="card-header">
+            <a href="https://mathlegame.com/" target="_blank" rel="noopener noreferrer" class="card bg-mathle" data-cat="matematica">
+                <span class="card-num">#18</span>
+                <div class="card-head">
                     <div class="card-icon">🔢</div>
-                    <span class="card-cat">Matemática</span>
+                    <div class="card-id">
+                        <span class="card-cat">Matemática · Número</span>
+                        <span class="card-title">Mathle</span>
+                    </div>
                 </div>
-                <div class="card-title">Mathle</div>
-                <div class="card-desc">Adivinhe o número do dia com dicas de "maior" ou "menor" a cada tentativa.</div>
+                <div class="card-desc">Adivinhe o número do dia com pistas de "maior" ou "menor". Simples, viciante, diário.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://mathler.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="matematica">
-                <div class="card-header">
+            <a href="https://mathler.com/" target="_blank" rel="noopener noreferrer" class="card bg-mathler" data-cat="matematica">
+                <span class="card-num">#19</span>
+                <div class="card-head">
                     <div class="card-icon">🟰</div>
-                    <span class="card-cat">Matemática</span>
+                    <div class="card-id">
+                        <span class="card-cat">Matemática · Alvo</span>
+                        <span class="card-title">Mathler</span>
+                    </div>
                 </div>
-                <div class="card-title">Mathler</div>
-                <div class="card-desc">Encontre a equação escondida que resulta no número-alvo mostrado.</div>
+                <div class="card-desc">Você sabe o resultado final. Agora descubra a equação que chega nele.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
             <!-- LIVROS -->
-            <a href="https://dlegames.org/game/guessthebook" target="_blank" rel="noopener noreferrer" class="card green" data-cat="livros">
-                <div class="card-header">
+            <a href="https://dlegames.org/game/guessthebook" target="_blank" rel="noopener noreferrer" class="card bg-book" data-cat="livros">
+                <span class="card-num">#20</span>
+                <div class="card-head">
                     <div class="card-icon">📖</div>
-                    <span class="card-cat">Livros</span>
+                    <div class="card-id">
+                        <span class="card-cat">Livros · Trecho</span>
+                        <span class="card-title">Guess the Book</span>
+                    </div>
                 </div>
-                <div class="card-title">Guess the Book</div>
-                <div class="card-desc">Cada erro revela um novo trecho da obra. Adivinhe o título pela descrição.</div>
+                <div class="card-desc">Começa com um trecho curto. Cada erro revela mais da obra. Descubra o título antes do texto acabar.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://www.redactedgame.com/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="livros">
-                <div class="card-header">
+            <a href="https://www.redactedgame.com/" target="_blank" rel="noopener noreferrer" class="card bg-redacted" data-cat="livros">
+                <span class="card-num">#21</span>
+                <div class="card-head">
                     <div class="card-icon">✂️</div>
-                    <span class="card-cat">Livros</span>
+                    <div class="card-id">
+                        <span class="card-cat">Livros · Clássicos</span>
+                        <span class="card-title">Redacted</span>
+                    </div>
                 </div>
-                <div class="card-title">Redacted</div>
-                <div class="card-desc">Clássicos com palavras censuradas e dicas de autor, país e ano.</div>
+                <div class="card-desc">Clássicos da literatura com palavras censuradas e dicas de autor, país e ano. Um jogo para leitores.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
             <!-- ARTIGOS -->
-            <a href="https://artigo.app/" target="_blank" rel="noopener noreferrer" class="card" data-cat="artigos">
-                <div class="card-header">
+            <a href="https://artigo.app/" target="_blank" rel="noopener noreferrer" class="card bg-artigo" data-cat="artigos">
+                <span class="card-num">#22</span>
+                <div class="card-head">
                     <div class="card-icon">📄</div>
-                    <span class="card-cat">Artigos</span>
+                    <div class="card-id">
+                        <span class="card-cat">Artigos · Wikipedia</span>
+                        <span class="card-title">Artigo.app</span>
+                    </div>
                 </div>
-                <div class="card-title">Artigo.app</div>
-                <div class="card-desc">Descubra o artigo da Wikipédia com palavras censuradas. Cada erro revela mais texto.</div>
-            </a>
-
-            <!-- ORDEM PARANORMAL -->
-            <a href="https://paranordle.com.br/" target="_blank" rel="noopener noreferrer" class="card" data-cat="jogos">
-                <div class="card-header">
-                    <div class="card-icon">🔮</div>
-                    <span class="card-cat">Jogos</span>
+                <div class="card-desc">Um artigo da Wikipédia com palavras censuradas. Adivinhe o tema conforme as lacunas vão sendo reveladas.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
                 </div>
-                <div class="card-title">Paranordle</div>
-                <div class="card-desc">Adivinhe o personagem do dia de Ordem Paranormal. Dicas de afiliação, elemento e status.</div>
             </a>
 
             <!-- CORES -->
-            <a href="https://colorhunch.com/" target="_blank" rel="noopener noreferrer" class="card" data-cat="cores">
-                <div class="card-header">
+            <a href="https://colorhunch.com/" target="_blank" rel="noopener noreferrer" class="card bg-color" data-cat="cores">
+                <span class="card-num">#23</span>
+                <div class="card-head">
                     <div class="card-icon">🖼️</div>
-                    <span class="card-cat">Cores</span>
+                    <div class="card-id">
+                        <span class="card-cat">Cores · Foto</span>
+                        <span class="card-title">Color Hunch</span>
+                    </div>
                 </div>
-                <div class="card-title">Color Hunch</div>
-                <div class="card-desc">Reconstrua a cor de uma foto real com sliders de matiz, saturação e brilho.</div>
+                <div class="card-desc">Reconstrua a cor de um pedaço de foto real usando sliders de matiz, saturação e brilho.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://gamocean.com/game/toon-tone/" target="_blank" rel="noopener noreferrer" class="card" data-cat="cores">
-                <div class="card-header">
+            <a href="https://gamocean.com/game/toon-tone/" target="_blank" rel="noopener noreferrer" class="card bg-toon" data-cat="cores">
+                <span class="card-num">#24</span>
+                <div class="card-head">
                     <div class="card-icon">🎭</div>
-                    <span class="card-cat">Cores</span>
+                    <div class="card-id">
+                        <span class="card-cat">Cores · Toon</span>
+                        <span class="card-title">Toon Tone</span>
+                    </div>
                 </div>
-                <div class="card-title">Toon Tone</div>
-                <div class="card-desc">Recrie a cor exata de personagens de desenho animado de memória.</div>
-            </a>
-
-            <a href="https://playgama.com/br/jogo/remember-the-color-a85c-1" target="_blank" rel="noopener noreferrer" class="card" data-cat="cores">
-                <div class="card-header">
-                    <div class="card-icon">🌈</div>
-                    <span class="card-cat">Cores</span>
+                <div class="card-desc">Personagens de desenho perdem a cor. Você precisa recriar o tom original de memória.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
                 </div>
-                <div class="card-title">Remember the Color</div>
-                <div class="card-desc">Memorize o tom que aparece por alguns segundos e reproduza de memória.</div>
             </a>
 
             <!-- OUTROS -->
-            <a href="https://heardle.app/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="outros">
-                <div class="card-header">
-                    <div class="card-icon">🎵</div>
-                    <span class="card-cat">Outros</span>
-                </div>
-                <div class="card-title">Heardle</div>
-                <div class="card-desc">Adivinhe a música do dia ouvindo os primeiros segundos. Cada erro libera mais da faixa.</div>
-            </a>
-
-            <a href="https://musicle.app/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="outros">
-                <div class="card-header">
+            <a href="https://musicle.app/" target="_blank" rel="noopener noreferrer" class="card bg-musicle" data-cat="outros">
+                <span class="card-num">#25</span>
+                <div class="card-head">
                     <div class="card-icon">🎶</div>
-                    <span class="card-cat">Outros</span>
+                    <div class="card-id">
+                        <span class="card-cat">Outros · Letra</span>
+                        <span class="card-title">Musicle</span>
+                    </div>
                 </div>
-                <div class="card-title">Musicle</div>
-                <div class="card-desc">Adivinhe a música do dia pelas letras da canção que vão aparecendo.</div>
+                <div class="card-desc">Adivinhe a música do dia pela letra. Palavras aparecem aos poucos — e o relógio corre.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
-            <a href="https://contexto.me/" target="_blank" rel="noopener noreferrer" class="card green" data-cat="outros">
-                <div class="card-header">
+            <a href="https://contexto.me/" target="_blank" rel="noopener noreferrer" class="card bg-contexto" data-cat="outros">
+                <span class="card-num">#26</span>
+                <div class="card-head">
                     <div class="card-icon">🧠</div>
-                    <span class="card-cat">Outros</span>
+                    <div class="card-id">
+                        <span class="card-cat">Outros · Contexto</span>
+                        <span class="card-title">Contexto</span>
+                    </div>
                 </div>
-                <div class="card-title">Contexto</div>
-                <div class="card-desc">Descubra a palavra secreta pelo contexto. Ranking de 1 a 1000 mostra o quão perto você está.</div>
+                <div class="card-desc">Adivinhe a palavra secreta pelo contexto. Ranking de 1 a 1000 mostra o quão perto você está.</div>
+                <div class="card-status">
+                    <span class="card-badge"><span class="badge-dot"></span> Diário</span>
+                    <span class="card-arrow">↗</span>
+                </div>
             </a>
 
         </div>
 
         <footer>
-            Feito para a comunidade de streamers e viewers.<br>
-            Todos os links abrem em uma nova aba — <a href="https://term.ooo/" target="_blank" rel="noopener noreferrer">comece pelo Termo</a>.
+            <p class="footer-msg">
+                >_ todos os links abrem em nova aba — <a href="https://term.ooo/" target="_blank" rel="noopener noreferrer">comece pelo termo</a>.
+            </p>
+
+            <a href="https://instagram.com/_samusantana_" target="_blank" rel="noopener noreferrer" class="credit">
+                feito por <span class="credit-handle">@_samusantana_</span> <span class="credit-arrow">↗</span>
+            </a>
         </footer>
 
     </div>
 
     <script>
-        // Filtro simples por categoria
+        const items = document.querySelectorAll('.card');
+
+        const counts = { all: items.length };
+        items.forEach(item => {
+            const cat = item.dataset.cat;
+            counts[cat] = (counts[cat] || 0) + 1;
+        });
+
+        document.querySelectorAll('.filter-btn .count').forEach(el => {
+            const cat = el.dataset.count;
+            el.textContent = String(counts[cat] || 0).padStart(2, '0');
+        });
+
+        const heroCounter = document.getElementById('heroCounter');
+        const statTotal = document.getElementById('statTotal');
+        const statLabel = document.getElementById('statLabel');
+
+        const catLabels = {
+            all: 'Jogos catalogados',
+            palavras: 'Jogos de palavras',
+            jogos: 'Jogos de adivinhar',
+            matematica: 'Jogos de matemática',
+            livros: 'Jogos de livros',
+            artigos: 'Jogos de artigos',
+            cores: 'Jogos de cores',
+            outros: 'Outros desafios'
+        };
+
         const filterBtns = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.card');
+
+        function updateCounter(filter) {
+            heroCounter.classList.remove('pulse');
+            void heroCounter.offsetWidth;
+            heroCounter.classList.add('pulse');
+            statTotal.textContent = counts[filter] || 0;
+            statLabel.textContent = catLabels[filter] || 'Jogos catalogados';
+        }
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -632,14 +1374,50 @@
 
                 const filter = btn.dataset.filter;
 
-                cards.forEach(card => {
-                    if (filter === 'all' || card.dataset.cat === filter) {
-                        card.style.display = '';
+                items.forEach(item => {
+                    if (filter === 'all' || item.dataset.cat === filter) {
+                        item.style.display = '';
                     } else {
-                        card.style.display = 'none';
+                        item.style.display = 'none';
                     }
                 });
+
+                updateCounter(filter);
             });
+        });
+
+        statTotal.textContent = counts.all;
+        statLabel.textContent = catLabels.all;
+
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeLabel = document.getElementById('themeLabel');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeLabel.textContent = 'Modo claro';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeLabel.textContent = 'Modo escuro';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            setTheme('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(isDark ? 'light' : 'dark');
         });
     </script>
 </body>
